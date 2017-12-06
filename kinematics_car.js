@@ -100,7 +100,7 @@ const runAnimation = () => {
 			const isStopped = VELOCITY ** 2 - 2 * DISTANCE * DECELERATION < 0;
 			if (isPassed && isStopped) {
 				answer.innerHTML = 'IT CAN BOTH STOP AND PASS';
-				return 'pass';
+				return 'stop';
 			} else if (isPassed) {
 				answer.innerHTML = 'IT CAN ONLY PASS';
 				return 'pass';
