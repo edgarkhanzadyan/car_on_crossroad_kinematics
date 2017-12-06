@@ -26,7 +26,7 @@ const runAnimation = () => {
 		// interval instance
 		let intervalId;
 		// change animation button to Stop Animation when animation has started
-		const animationButton = document.getElementsByClassName('runAnimation')[0];
+		const animationButton = document.getElementsByClassName('animationButton')[0];
 		animationButton.innerHTML = 'Stop Animation!';
 		animationButton.onclick = () => {
 			animationButton.innerHTML = 'Run Animation!';
@@ -136,9 +136,85 @@ const runAnimation = () => {
 			() => raf = window.requestAnimationFrame(draw.bind(null, 'hey')),
 			FRAME_MILLISECONDS
 		);
+		// dra distance - time diagram
+		const drawDistanceTimeDiagram = () => {
+			let dis = 0, t = 0, dataPoints = [];
+			// make dots for dataPoints for the diagram
+			while (dis < 300 && t < 15) {
+				// decide if we need red section or not
+				if (dis >= DISTANCE / MAKE_BIGGER_BY && dis <= (DISTANCE + LENGTH) / MAKE_BIGGER_BY) {
+					dataPoints.push({x: t, y: dis, lineColor: 'red', markerColor: 'red'});
+				} else {
+					dataPoints.push({x: t, y: dis});
+				}
+				// decide if we are passing the crossroad or not
+				if (decision === 'pass') {
+					dis = (VELOCITY * t + ((ACCELERATION * (t ** 2)) / 2)) / MAKE_BIGGER_BY;
+				} else if (decision === 'stop') {
+					dis = (VELOCITY * t - ((DECELERATION * (t ** 2)) / 2)) / MAKE_BIGGER_BY;
+				}
+				// here you can choose the interval
+				t += 0.25;
+			}
+			// making CanvasJS.chart object
+			const chart = new CanvasJS.Chart("distanceTimeChart",
+			{
+				title:{
+					text: "Distance - time diagram"
+				},
+				data: [
+					{
+						type: "line",
+						dataPoints
+					}
+				]
+			});
+			// draw the chart
+			chart.render();
+		}
+		// dra distance - speed diagram
+		const drawDistanceSpeedDiagram = () => {
+			let dis = 0, t = 0, velocity = VELOCITY / MAKE_BIGGER_BY, dataPoints = [];
+			while (dis < 300 && t < 15) {
+				// decide if we need red section or not
+				if (dis >= DISTANCE / MAKE_BIGGER_BY && dis <= (DISTANCE + LENGTH) / MAKE_BIGGER_BY) {
+					dataPoints.push({x: velocity, y: dis, lineColor: 'red', markerColor: 'red'});
+				} else {
+					dataPoints.push({x: velocity, y: dis});
+				}
+				// decide if we are passing the crossroad or not
+				if (decision === 'pass') {
+					velocity = (VELOCITY + ACCELERATION * t) / MAKE_BIGGER_BY;
+					dis = (VELOCITY * t + ((ACCELERATION * (t ** 2)) / 2)) / MAKE_BIGGER_BY;
+				} else if (decision === 'stop') {
+					velocity = (VELOCITY - DECELERATION * t) / MAKE_BIGGER_BY;
+					dis = (VELOCITY * t - ((DECELERATION * (t ** 2)) / 2)) / MAKE_BIGGER_BY;
+				}
+				// here you can choose the interval
+				t += 0.25;
+			}
+			// making CanvasJS.chart object
+			const chart = new CanvasJS.Chart("distanceSpeedChart",
+			{
+				title:{
+					text: "Distance - speed diagram"
+				},
+				data: [
+					{
+						type: "line",
+						dataPoints
+					}
+				]
+			});
+			// draw the chart
+			chart.render();
+		}
+		drawDistanceTimeDiagram();
+		drawDistanceSpeedDiagram();
 	} else {
 		// show WRONG INPUTS if the inputs were not filled or if the inputs are not numbers
 		document.getElementsByClassName('wrongInputs')[0].innerHTML = "!!!!!Wrong Inputs!!!!!"
 	}
 }
-document.getElementsByClassName('runAnimation')[0].onclick = runAnimation;
+// give the initial onclick function to animationButton
+document.getElementsByClassName('animationButton')[0].onclick = runAnimation;

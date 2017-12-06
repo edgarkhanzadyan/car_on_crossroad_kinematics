@@ -13,7 +13,7 @@
 			Duration of yellow light: <input type="text" class="time"><br>
 			Car's ability to accelerate: <input type="text" class="acceleration"><br>
 			Car's ability to decelerate: <input type="text" class="deceleration"><br>
-			<button type="button" class="runAnimation">Run Animation!</button>
+			<button type="button" class="animationButton">Run Animation!</button>
 		</form>
 		<p id="time">TIME: 0</p>
 		<p id="answer">ANSWER?</p>
@@ -26,6 +26,9 @@
 			Car's ability to decelerate: <div class="decelerationDisplay"></div>
 		</form>
 		<p>We don't count the size of the car. Everything is considered about the front of the car</p>
+		<div id="distanceTimeChart" style="height: 300px; width: 100%;"></div>
+		<div id="distanceSpeedChart" style="height: 300px; width: 100%;"></div>
 		<script src="kinematics_car.js"></script>
+		<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 	</body>
 </html>
