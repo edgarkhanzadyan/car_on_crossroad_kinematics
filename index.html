@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<title>Mechanics: Kinematics</title>
+	</head>
+	<body style="justify-content: center; align-items: center;">
+		<canvas id="canvas" width="1500" height="300">
+		</canvas>
+		<p id="time">TIME: 0</p>
+		<p id="answer">ANSWER?</p>
+		<p>We don't count the size of the car. Everything is considered about the front line of the car</p>
+		<script>
+			// set constants
+			const
+				MAKE_BIGGER_BY = 10,
+				TIME = 2,
+				FRAME_MILLISECONDS = 1000 / 60, // 60 frames per second
+				ACCELERATION = 1 * MAKE_BIGGER_BY,
+				DECELERATION = 1 * MAKE_BIGGER_BY,
+				VELOCITY = 10 * MAKE_BIGGER_BY,
+				DISTANCE = 10 * MAKE_BIGGER_BY,
+				LENGTH = 10 * MAKE_BIGGER_BY,
+				CAR_WIDTH = 10 * MAKE_BIGGER_BY,
+				CAR_HEIGHT = 5 * MAKE_BIGGER_BY;
+			const canvas = document.getElementById('canvas');
+			const ctx = canvas.getContext('2d');
+			const answer = document.getElementById('answer');
+			const time = document.getElementById('time');
+			// car object
+			const car = {
+				millisecondsFromStart: 0,
+				x: 0,
+				y: 100,
+				color: 'blue',
+				draw: function() {
+					// draw car
+					ctx.fillStyle = this.color;
+					ctx.fillRect(this.x, this.y, CAR_WIDTH, CAR_HEIGHT);
+					// draw first line
+					ctx.beginPath();
+					ctx.moveTo(CAR_WIDTH + DISTANCE, 0);
+					ctx.lineTo(CAR_WIDTH + DISTANCE, 300);
+					ctx.stroke();
+					// draw second line
+					ctx.beginPath();
+					ctx.moveTo(CAR_WIDTH + DISTANCE + LENGTH, 0);
+					ctx.lineTo(CAR_WIDTH + DISTANCE + LENGTH, 300);
+					ctx.stroke();
+				}
+			};
+			// compute the decision if the car should pass or not the crossroad;
+			// this computes only once in the beginning
+			const computeAnswer = () => {
+				const isPassed = VELOCITY * TIME + ((ACCELERATION * (TIME ** 2)) / 2) >= DISTANCE + LENGTH;
+				const isStopped = VELOCITY * TIME - ((DECELERATION * (TIME ** 2)) / 2) <= DISTANCE;
+				if (isPassed && isStopped) {
+					answer.innerHTML = 'IT CAN BOTH STOP AND PASS';
+					return 'pass';
+				} else if (isPassed) {
+					answer.innerHTML = 'IT CAN ONLY PASS';
+					return 'pass';
+				}
+				else if (isStopped) {
+					answer.innerHTML = 'IT CAN ONLY STOP';
+					return 'stop';
+				} else {
+					answer.innerHTML = 'OMG IT\'S GONNA CRUSH';
+					return 'stop';
+				}
+			};
+			// what to do: to pass the crossroad or to stop before the first line?
+			const decision = computeAnswer();
+			// compute position (X) of the car on each frame
+			const computeX = (currentTime) => {
+				if (decision === 'pass') {
+					return VELOCITY * currentTime + ((ACCELERATION * (currentTime ** 2)) / 2);
+				} else if (decision === 'stop') {
+					return VELOCITY * currentTime - ((DECELERATION * (currentTime ** 2)) / 2);
+				}
+			};
+			// redraw the car and crossroad lines on each frame
+			function draw(s) {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				car.x = computeX(car.millisecondsFromStart / 1000);
+				car.millisecondsFromStart += FRAME_MILLISECONDS;
+				time.innerHTML = `TIME: ${car.millisecondsFromStart / 1000}`
+				car.draw();
+			}
+			// set interval every 1000 / 60 milliseconds so we will get 60 frames per second screen
+			setInterval(
+				() => window.requestAnimationFrame(
+					draw.bind(null, 'hey')
+				),
+				FRAME_MILLISECONDS
+			);
+		</script>
+	</body>
+</html>
