@@ -140,7 +140,7 @@ const runAnimation = () => {
 		const drawDistanceTimeDiagram = () => {
 			let dis = 0, t = 0, dataPoints = [];
 			// make dots for dataPoints for the diagram
-			while (dis < 300 && t < 15) {
+			while (dis < 1500 && t < 15) {
 				// decide if we need red section or not
 				if (dis >= DISTANCE / MAKE_BIGGER_BY && dis <= (DISTANCE + LENGTH) / MAKE_BIGGER_BY) {
 					dataPoints.push({x: t, y: dis, lineColor: 'red', markerColor: 'red'});
@@ -175,7 +175,7 @@ const runAnimation = () => {
 		// dra distance - speed diagram
 		const drawDistanceSpeedDiagram = () => {
 			let dis = 0, t = 0, velocity = VELOCITY / MAKE_BIGGER_BY, dataPoints = [];
-			while (dis < 300 && t < 15) {
+			while (dis < 1500 && t < 15) {
 				// decide if we need red section or not
 				if (dis >= DISTANCE / MAKE_BIGGER_BY && dis <= (DISTANCE + LENGTH) / MAKE_BIGGER_BY) {
 					dataPoints.push({x: velocity, y: dis, lineColor: 'red', markerColor: 'red'});
