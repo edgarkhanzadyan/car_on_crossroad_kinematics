@@ -124,7 +124,7 @@ const runAnimation = () => {
 			}
 		};
 		// redraw the car and crossroad lines on each frame
-		function draw(s) {
+		function draw() {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			car.x = computeX(car.millisecondsFromStart / 1000);
 			car.millisecondsFromStart += FRAME_MILLISECONDS;
@@ -133,10 +133,10 @@ const runAnimation = () => {
 		}
 		// set interval every 1000 / 60 milliseconds so we will get 60 frames per second screen
 		intervalId = setInterval(
-			() => raf = window.requestAnimationFrame(draw.bind(null, 'hey')),
+			() => raf = window.requestAnimationFrame(draw),
 			FRAME_MILLISECONDS
 		);
-		// dra distance - time diagram
+		// draw distance - time diagram
 		const drawDistanceTimeDiagram = () => {
 			let dis = 0, t = 0, dataPoints = [];
 			// make dots for dataPoints for the diagram
@@ -172,7 +172,7 @@ const runAnimation = () => {
 			// draw the chart
 			chart.render();
 		}
-		// dra distance - speed diagram
+		// draw distance - speed diagram
 		const drawDistanceSpeedDiagram = () => {
 			let dis = 0, t = 0, velocity = VELOCITY / MAKE_BIGGER_BY, dataPoints = [];
 			while (dis < 1500 && t < 15) {
